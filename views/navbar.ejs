@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Billing System Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"> 
+
+    <!-- Bootstrap Icons (for bi icons if needed) -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <!-- Bootstrap JS Bundle (includes Popper for dropdowns) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <style>
+        * {
+            margin: 0px;
+            padding: 0px;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --dark-bg: #1a1a2e;
+            --dark-sidebar: #16213e;
+            --dark-card: #0f3460;
+            --dark-text: #e6e6e6;
+            --dark-border: #2a2a3a;
+            --light-bg: #f8f9fa;
+            --light-sidebar: #ffffff;
+            --light-card: #ffffff;
+            --light-text: #333333;
+            --light-border: #e0e0e0;
+            --primary-color: #6c63ff;
+            --secondary-color: #4a44f2;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            transition: all 0.3s ease;
+            padding: 0;
+            overflow-x: hidden;
+            background-color: var(--light-bg);
+            color: var(--light-text);
+        }
+
+        .dark-mode {
+            background-color: var(--dark-bg);
+            color: var(--dark-text);
+        }
+
+        .dark-mode .sidebar {
+            background-color: var(--dark-sidebar);
+            border-right-color: var(--dark-border);
+        }
+
+        .dark-mode .card {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        .dark-mode .nav-link {
+            color: var(--dark-text);
+        }
+
+        .dark-mode .nav-link.active {
+            background-color: rgba(108, 99, 255, 0.2);
+            color: var(--primary-color);
+        }
+
+        .dark-mode .nav-link:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+
+        .dark-mode .form-control {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+            color: var(--dark-text);
+        }
+
+        .dark-mode .dropdown-menu {
+            background-color: var(--dark-card);
+            border-color: var(--dark-border);
+        }
+
+        .dark-mode .dropdown-item {
+            color: var(--dark-text);
+        }
+
+        .dark-mode .dropdown-item:hover {
+            background-color: rgba(108, 99, 255, 0.2);
+        }
+
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            background-color: var(--light-sidebar);
+            border-right: 1px solid var(--light-border);
+            transition: all 0.3s ease;
+            width: 280px;
+            padding: 20px;
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+
+        .nav-link {
+            border-radius: 8px;
+            margin-bottom: 5px;
+            padding: 10px 15px;
+            color: var(--light-text);
+            transition: all 0.2s ease;
+        }
+
+        .nav-link.active {
+            background-color: rgba(108, 99, 255, 0.1);
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .nav-link:hover:not(.active) {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .nav-link i {
+            margin-right: 10px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            min-height: 100vh;
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .card {
+            border-radius: 12px;
+            border: 1px solid var(--light-border);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card {
+            padding: 20px;
+        }
+
+        .stat-card i {
+            font-size: 24px;
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-card .value {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-card .label {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        .dark-mode .stat-card .label {
+            color: #adb5bd;
+        }
+
+        .chart-container {
+            height: 300px;
+            position: relative;
+        }
+
+        .recent-invoices {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .invoice-item {
+            border-bottom: 1px solid var(--light-border);
+            padding: 15px 0;
+        }
+
+        .dark-mode .invoice-item {
+            border-bottom-color: var(--dark-border);
+        }
+
+        .invoice-status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-paid {
+            background-color: rgba(40, 167, 69, 0.1);
+            color: #28a745;
+        }
+
+        .status-pending {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #ffc107;
+        }
+
+        .status-overdue {
+            background-color: rgba(220, 53, 69, 0.1);
+            color: #dc3545;
+        }
+
+        .topbar {
+            background-color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--light-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-left: 280px;
+            transition: all 0.3s ease;
+        }
+
+        .dark-mode .topbar {
+            background-color: var(--dark-card);
+            border-bottom-color: var(--dark-border);
+        }
+
+        .dropdown_area {
+            background: linear-gradient(135deg, #2c3e50 0%, #6a89cc 50%, #f6b93b 100%);
+            color: #fff;
+            font-size: 1.1rem;
+            font-weight: 700;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .dropdown {
+            position: relative;
+            /* z-index: 1001; */
+        }
+
+        .dropdown-menu {
+            border-radius: 1rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        #darkModeToggle:hover {
+            color: #6c63ff;
+        }
+
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 260px;
+            }
+            
+            .sidebar.mobile-open {
+                transform: translateX(0);
+            }
+            
+            .main-content, .topbar {
+                margin-left: 0;
+            }
+            
+            .mobile-overlay.active {
+                display: block;
+            }
+        }
+
+        @media (max-width: 576px) {
+        .Billing1{
+        display: none;
+        }
+            .main-content {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="mobile-overlay" id="mobileOverlay"></div>
+    
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="d-flex flex-column h-100">
+            <!-- Logo and Dark Mode Toggle -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h4 class="fw-bold mb-0"
+                    style="background: linear-gradient(90deg, #2c3e50, #6a89cc, #38ada9, #b53471, #f6b93b); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">
+                    Shourya <span style="font-weight: 900;">Fashion</span>
+                </h4>
+                <button id="darkModeToggle" class="btn btn-sm p-2">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+
+            <!-- User Profile -->
+            <div class="d-flex align-items-center mb-4 p-3 rounded bg-light">
+                <div class="user-avatar me-3"
+                    style="background: linear-gradient(135deg, #2c3e50 0%, #6a89cc 50%, #f6b93b 100%); color: #fff; font-size: 1.5rem; font-weight: 700; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; border-radius: 50%; box-shadow: 0 2px 8px rgba(44,62,80,0.10);">
+                    <span style="font-family: 'Montserrat', sans-serif; font-weight: 900; font-size: 1.3rem;">OB</span>
+                </div>
+                <div>
+                    <h6 class="mb-0">Omkar Bhawar</h6>
+                    <a href="/wonner" class="badge rounded-pill px-3 py-1 text-white"
+                        style="font-size: 0.85rem; letter-spacing: 0.5px; font-weight: 600; box-shadow: 0 1px 4px rgba(44,62,80,0.08); background: linear-gradient(90deg, #2c3e50, #6a89cc, #38ada9, #b53471, #f6b93b);">
+                        <i class="fas fa-user-tie me-1"></i> Owner
+                    </a>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <ul class="nav flex-column mb-auto">
+                <li class="nav-item">
+                    <a href="/today" class="nav-link">
+                        <i class="fas fa-clock"></i>
+                        <span>Today</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/billing_page" class="nav-link Billing1">
+                        <i class="fas fa-credit-card"></i>
+                        <span>Billing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/customer_list" class="nav-link">
+                        <i class="fas fa-users"></i> Customer List
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="stock" class="nav-link">
+                        <i class="fas fa-boxes-stacked"></i> Stock 
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="/lent_customer" class="nav-link">
+                        <i class="fas fa-hand-holding-usd"></i> Lent
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fas fa-cog"></i> Settings
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Topbar -->
+    <nav class="topbar">
+        <button class="btn btn-link text-dark me-2" id="sidebarToggle">
+            <i class="fas fa-bars"></i>
+        </button>
+        
+        <!-- User Dropdown -->
+        <div class="dropdown">
+            <button class="btn btn-light shadow-sm dropdown-toggle d-flex align-items-center px-3 py-2 rounded-pill"
+                type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false"
+                style="font-weight: 600;">
+                <div class="user-avatar me-2 dropdown_area">OB</div>
+                <span style="color: #2c3e50;">Omkar Bhawar</span>
+            </button>
+
+            <ul class="dropdown-menu dropdown-menu-end shadow-sm" style="border-radius: 1rem;"
+                aria-labelledby="dropdownMenuButton">
+                <li><a class="dropdown-item py-2" href="/wonner"><i class="fas fa-user me-2"></i> Profile</a></li>
+                <li><a class="dropdown-item py-2" href="#"><i class="fas fa-cog me-2"></i> Settings</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item py-2 text-danger" href="/login/logout"><i
+                            class="fas fa-sign-out-alt me-2"></i> Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+
+
+    <script>
+        // Dark mode toggle
+        const darkModeToggle = document.getElementById('darkModeToggle');
+        const body = document.body;
+        
+        // Check for saved user preference
+        if (localStorage.getItem('darkMode') === 'enabled') {
+            body.classList.add('dark-mode');
+            darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
+
+        darkModeToggle.addEventListener('click', () => {
+            body.classList.toggle('dark-mode');
+
+            if (body.classList.contains('dark-mode')) {
+                localStorage.setItem('darkMode', 'enabled');
+                darkModeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('darkMode', 'disabled');
+                darkModeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // Sidebar toggle for mobile
+        const sidebar = document.getElementById('sidebar');
+        const sidebarToggle = document.getElementById('sidebarToggle');
+        const mobileOverlay = document.getElementById('mobileOverlay');
+        
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('mobile-open');
+            mobileOverlay.classList.toggle('active');
+        });
+        
+        mobileOverlay.addEventListener('click', () => {
+            sidebar.classList.remove('mobile-open');
+            mobileOverlay.classList.remove('active');
+        });
+        
+        function handleResize() {
+            if (window.innerWidth > 992) {
+                sidebar.classList.remove('mobile-open');
+                mobileOverlay.classList.remove('active');
+            }
+        }
+        
+        window.addEventListener('resize', handleResize);
+        
+        // Initialize chart (placeholder)
+        window.addEventListener('load', function() {
+            const ctx = document.getElementById('salesChart').getContext('2d');
+            // This would be replaced with actual Chart.js initialization
+            ctx.font = "14px Arial";
+            ctx.fillStyle = body.classList.contains('dark-mode') ? '#e6e6e6' : '#333333';
+            ctx.fillText("Sales chart visualization would appear here", 10, 150);
+        });
+    </script>
+</body>
+</html>

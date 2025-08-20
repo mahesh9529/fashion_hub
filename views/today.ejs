@@ -1,0 +1,284 @@
+<%- include('navbar.ejs') %>
+<div class="dashboard-container" style="margin-left: 280px; padding: 2rem;">
+
+    <!-- Date Badge with Improved Styling -->
+    <div class="d-flex justify-content-center mb-4" style="margin-right:90px;">
+        <div class="date-badge p-3 rounded-pill" style="background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%); box-shadow: 0 4px 12px rgba(0,0,0,0.08);">
+            <i class="fas fa-calendar-day me-2" style="color: #6a89cc; font-size: 1.25rem;"></i>
+            <span id="current-date" class="fw-bold" style="color: #620ca3; font-size: 1.1rem;"></span>
+        </div>
+    </div>
+
+    <!-- Stats Cards with Vibrant Color Scheme -->
+    <div class="row g-4">
+        <!-- Revenue Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card card h-100 border-0" style="background: linear-gradient(135deg, #f0f7ff 0%, #d0e3ff 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-uppercase mb-2" style="color: #4361ee;">Today's Revenue</h6>
+                            <h2 class="mb-0 fw-bold" style="color: #3a0ca3;">
+                                ₹<%= (totalToday || 0).toLocaleString('en-IN') %>
+                            </h2>
+                        </div>
+                        <div class="stats-icon" style="background: rgba(58, 12, 163, 0.1);">
+                            <i class="fas fa-rupee-sign" style="color: #3a0ca3;"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" style="width: 75%; background-color: #3a0ca3;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Customers Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card card h-100 border-0" style="background: linear-gradient(135deg, #f0fff4 0%, #dcffe4 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-uppercase mb-2" style="color: #38b000;">Today's Customers</h6>
+                            <h2 class="mb-0 fw-bold" style="color: #2a9134;">
+                                <%= customersToday %>
+                            </h2>
+                        </div>
+                        <div class="stats-icon" style="background: rgba(56, 176, 0, 0.1);">
+                            <i class="fas fa-users" style="color: #2a9134;"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" style="width: 65%; background-color: #38b000;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Today's Lend Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card card h-100 border-0" style="background: linear-gradient(135deg, #fff9f0 0%, #ffeedb 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-uppercase mb-2" style="color: #ff9e00;">Today's Lend</h6>
+                            <h2 class="mb-0 fw-bold" style="color: #cc7e00;">
+                                ₹<%= lentToday.toLocaleString('en-IN') %>
+                            </h2>
+                        </div>
+                        <div class="stats-icon" style="background: rgba(255, 158, 0, 0.1);">
+                            <i class="fas fa-hand-holding-usd" style="color: #cc7e00;"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <div class="progress" style="height: 6px;">
+                            <div class="progress-bar" style="width: 45%; background-color: #ff9e00;"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pending Payments Card -->
+        <div class="col-md-6 col-lg-3">
+            <div class="stats-card card h-100 border-0" style="background: linear-gradient(135deg, #fff0f3 0%, #ffdce1 100%);">
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-start">
+                        <div>
+                            <h6 class="text-uppercase mb-2" style="color: #ef233c;">Pending Payments</h6>
+                            <h2 class="mb-0 fw-bold" style="color: #c81e32;">
+                                ₹<%= lentTotal.toLocaleString('en-IN') %>
+                            </h2>
+                        </div>
+                        <div class="stats-icon" style="background: rgba(239, 35, 60, 0.1);">
+                            <i class="fas fa-exclamation-circle" style="color: #c81e32;"></i>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <a href="/lent_customer" class="btn btn-sm" style="background: #ef233c; color: white;">
+                            View Details <i class="fas fa-arrow-right ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions Grid with Vibrant Colors -->
+    <div class="row mt-4 g-4">
+        <div class="col-md-6 col-lg-3">
+            <a href="/billing_page" class="card action-card h-100 border-0 text-decoration-none" style="background: linear-gradient(135deg, #f8f9ff 0%, #e8ebff 100%);">
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mx-auto mb-3" style="background: rgba(63, 55, 201, 0.1);">
+                        <i class="fas fa-credit-card" style="color: #3f37c9; font-size: 1.75rem;"></i>
+                    </div>
+                    <h5 class="mb-1" style="color: #3a0ca3;">New Bill</h5>
+                    <p class="small mb-0" style="color: #6a89cc;">Create customer invoice</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <a href="/customer_list" class="card action-card h-100 border-0 text-decoration-none" style="background: linear-gradient(135deg, #f5f9ff 0%, #e0ecff 100%);">
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mx-auto mb-3" style="background: rgba(28, 119, 242, 0.1);">
+                        <i class="fas fa-users" style="color: #1c77f2; font-size: 1.75rem;"></i>
+                    </div>
+                    <h5 class="mb-1" style="color: #1a5cb8;">Customers</h5>
+                    <p class="small mb-0" style="color: #4a89dc;">Manage client database</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <a href="stock" class="card action-card h-100 border-0 text-decoration-none" style="background: linear-gradient(135deg, #f5fff7 0%, #e0ffe6 100%);">
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mx-auto mb-3" style="background: rgba(40, 167, 69, 0.1);">
+                        <i class="fas fa-boxes" style="color: #28a745; font-size: 1.75rem;"></i>
+                    </div>
+                    <h5 class="mb-1" style="color: #218838;">Stock</h5>
+                    <p class="small mb-0" style="color: #5cb85c;">View stock levels</p>
+                </div>
+            </a>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <a href="/lent_customer" class="card action-card h-100 border-0 text-decoration-none" style="background: linear-gradient(135deg, #fff8f5 0%, #ffebe0 100%);">
+                <div class="card-body text-center p-4">
+                    <div class="icon-wrapper mx-auto mb-3" style="background: rgba(242, 153, 74, 0.1);">
+                        <i class="fas fa-hand-holding-usd" style="color: #f2994a; font-size: 1.75rem;"></i>
+                    </div>
+                    <h5 class="mb-1" style="color: #e67e22;">Lend Manager</h5>
+                    <p class="small mb-0" style="color: #f39c12;">Track pending payments</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+<style>
+    body {
+        font-family: 'Manrope', sans-serif;
+        background-color: #f8fafc;
+        padding: 20px;
+    }
+    
+    .dashboard-container {
+        transition: all 0.3s ease;
+    }
+    
+    .date-badge {
+        transition: all 0.3s ease;
+        border: 1px solid rgba(106, 137, 204, 0.2);
+    }
+    
+    .date-badge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 15px rgba(106, 137, 204, 0.15);
+    }
+    
+    .stats-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .stats-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .stats-icon {
+        width: 48px;
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .stats-card:hover .stats-icon {
+        transform: scale(1.1);
+    }
+    
+    .action-card {
+        transition: all 0.3s ease;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
+    
+    .action-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .icon-wrapper {
+        width: 60px;
+        height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 12px;
+        transition: all 0.3s ease;
+    }
+    
+    .action-card:hover .icon-wrapper {
+        transform: scale(1.1);
+    }
+    
+    @media (max-width: 992px) {
+        .dashboard-container {
+            margin-left: 0 !important;
+            padding: 1rem !important;
+        }
+    }
+</style>
+
+<script>
+    // Enhanced Date Display
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    
+    function updateDateTime() {
+        const now = new Date();
+        const dateElement = document.getElementById('current-date');
+        if(dateElement) {
+            dateElement.textContent = now.toLocaleDateString('en-IN', options);
+        }
+    }
+    
+    // Initial update
+    updateDateTime();
+    
+    // Update every minute
+    setInterval(updateDateTime, 60000);
+    
+    // Card entrance animation
+    document.addEventListener('DOMContentLoaded', () => {
+        const cards = document.querySelectorAll('.stats-card, .action-card');
+        cards.forEach((card, index) => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = `all 0.5s ease ${index * 0.1}s`;
+            
+            setTimeout(() => {
+                card.style.opacity = '1';
+                card.style.transform = 'translateY(0)';
+            }, 100);
+        });
+    });
+</script>
+
+<%- include('footer.ejs') %>

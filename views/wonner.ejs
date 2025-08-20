@@ -1,0 +1,293 @@
+<%- include('navbar.ejs') %>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Owner Dashboard | Shourya Fashion</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        :root {
+            --primary: #3a0ca3;
+            --secondary: #4361ee;
+            --accent: #f72585;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gradient: linear-gradient(135deg, #3a0ca3 0%, #4361ee 50%, #4cc9f0 100%);
+        }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            color: var(--dark);
+            padding:30px;
+        }
+        
+        .dashboard-header {
+            background: var(--gradient);
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+            box-shadow: 0 4px 20px rgba(58, 12, 163, 0.15);
+            margin-left:200px;
+        }
+        
+        .profile-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            margin-bottom: 2rem;
+        }
+        
+        .profile-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .profile-header {
+            background: linear-gradient(135deg, #5e72e4 0%, #b2bec3 100%);
+            padding: 2rem;
+            text-align: center;
+            color: #f4f6fb;
+        }
+        
+        .avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin: 0 auto;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-body {
+            padding: 2rem;
+        }
+        
+        .profile-title {
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .profile-subtitle {
+            color: var(--secondary);
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+        }
+        
+        .info-item {
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .info-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(58, 12, 163, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+            color: var(--primary);
+        }
+        
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .stats-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2c3e50 0%, #6a89cc 50%, #38ada9 100%);
+        }
+        
+        .stats-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+        
+        .quick-action {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+        
+        .quick-action:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+        }
+        
+        .action-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            color: white;
+            background: var(--gradient);
+            margin-right: 1rem;
+        }
+        
+        .action-title {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.25rem;
+        }
+        
+        .action-desc {
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        .store-image {
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: 0 6px 30px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease;
+        }
+        
+        .store-image:hover {
+            transform: scale(1.02);
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-header {
+                padding: 2rem 0;
+            }
+            
+            .avatar {
+                width: 100px;
+                height: 100px;
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-header" style="width:1000px; margin-left:300px;">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h1 class="display-5 fw-bold mb-3 text-center">Owner Dashboard</h1>
+                    <p class="lead mb-0 text-center">Welcome back, Omkar. Here's your business overview.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container py-4" style="margin-left:280px;">
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="profile-card">
+                    <div class="profile-header">
+                        <div class="avatar">OB</div>
+                    </div>
+                    <div class="profile-body">
+                        <h2 class="profile-title">Omkar Bhawar</h2>
+                        <h5 class="profile-subtitle"><i class="fas fa-user-tie me-2"></i>Owner & Founder</h5>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-store"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">Shourya Fashion Hub</h6>
+                                <small class="text-muted">Retail Clothing Business</small>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0">+91 7262836111</h6>
+                                <small class="text-muted">Primary Contact</small>
+                            </div>
+                        </div>
+                        
+                        <div class="info-item">
+                            <div class="info-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div>
+                                <h6 class="mb-0"></h6>bhawaromkar111@gmail.com
+                                <small class="text-muted">Business Email</small>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-4">
+                        
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary rounded-pill py-2">
+                                <i class="fas fa-user-edit me-2"></i>Edit Profile
+                            </button>
+                            <button class="btn btn-outline-primary rounded-pill py-2">
+                                <i class="fas fa-qrcode me-2"></i>Share Profile
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+
+            <div class="col-lg-6">
+                <div class="quick-action">
+                    <div class="d-flex align-items-center mb-3">
+                        <div class="action-icon bg-primary">
+                            <i class="fas fa-image"></i>
+                        </div>
+                        <div>
+                            <h5 class="action-title">Store Owner</h5>
+                            <p class="action-desc mb-0">Bhawar Omkar Ashok</p>
+                        </div>
+                    </div>
+                    <img src="/logo/omkar.jpg" alt="Shourya Fashion Hub" class="store-image">
+                </div>
+            </div>
+        
+        </div>
+    </div>
+
+</body>
+</html>
+<%- include('footer.ejs') %>

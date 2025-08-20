@@ -1,0 +1,423 @@
+<%- include('navbar.ejs') %>
+    <!DOCTYPE html>
+    <html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Stock Management - Shourya Fashion Hub</title>
+        <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css"> -->
+        <style>
+            :root {
+                --primary-color: #4e73df;
+                --secondary-color: #f8f9fc;
+                --accent-color: #2e59d9;
+                --text-dark: #5a5c69;
+            }
+
+            body {
+                font-family: 'Poppins', sans-serif;
+                background-color: var(--light-bg);
+                /* color: var(--dark-text); */
+                margin: 0;
+                padding: 20px;
+            }
+
+            .container-main {
+                margin-left: 280px;
+                padding: 2rem 1.5rem;
+                transition: all 0.3s;
+            }
+
+            .card {
+                border: none;
+                border-radius: 0.35rem;
+                box-shadow: 0 0.15rem 1.75rem 0 rgba(58, 59, 69, 0.15);
+            }
+
+            .card-header {
+                background-color: #f8f9fc;
+                border-bottom: 1px solid #e3e6f0;
+                padding: 1rem 1.35rem;
+                font-weight: 600;
+            }
+
+            .table-responsive {
+                overflow-x: auto;
+            }
+
+            .table {
+                margin-bottom: 0;
+            }
+
+            .table th {
+                background-color: var(--secondary-color);
+                border-top: none;
+                font-weight: 600;
+                color: var(--text-dark);
+            }
+
+            .btn-primary {
+                background-color: var(--primary-color);
+                border-color: var(--primary-color);
+            }
+
+            .btn-primary:hover {
+                background-color: var(--accent-color);
+                border-color: var(--accent-color);
+            }
+
+            .form-control:focus {
+                border-color: var(--primary-color);
+                box-shadow: 0 0 0 0.2rem rgba(78, 115, 223, 0.25);
+            }
+
+            .alert {
+                border-radius: 0.35rem;
+            }
+
+            .stock-actions .btn {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.875rem;
+            }
+
+            @media (max-width: 768px) {
+                .container-main {
+                    margin-left: 0;
+                    padding: 1rem;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container-main">
+            <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                <h1 class="h3 mb-0 text-gray-800">Stock Management</h1>
+                <button class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-bs-toggle="modal"
+                    data-bs-target="#addStockModal">
+                    <i class="bi bi-plus-circle-fill"></i> Add New Stock
+                </button>
+            </div>
+
+            <!-- Status Messages -->
+            <% if (typeof error !=='undefined' && error) { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    <%= error %>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+                    <% if (typeof success !=='undefined' && success) { %>
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>
+                            <%= success %>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Close"></button>
+                        </div>
+                        <% } %>
+
+                            <!-- Stock Summary Cards -->
+                            <div class="row mb-4">
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-primary h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div
+                                                        class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                        Total Products</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        <%= typeof totalProducts !=='undefined' ? totalProducts : '0' %>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="bi bi-box-seam fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-xl-3 col-md-6 mb-4">
+                                    <div class="card border-left-success h-100 py-2">
+                                        <div class="card-body">
+                                            <div class="row no-gutters align-items-center">
+                                                <div class="col mr-2">
+                                                    <div
+                                                        class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                        Total Items in Stock</div>
+                                                    <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                        <%= typeof totalItems !=='undefined' ? totalItems : '0' %>
+                                                    </div>
+                                                </div>
+                                                <div class="col-auto">
+                                                    <i class="bi bi-boxes fa-2x text-gray-300"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Stock List -->
+                            <div class="card shadow mb-4">
+                                <div class="card-header d-flex justify-content-between align-items-center py-3">
+                                    <h6 class="m-0 font-weight-bold text-primary">Current Stock</h6>
+                                    <div class="dropdown">
+                                        <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                                            id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-filter"></i> Filter
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                            <li><a class="dropdown-item" href="#">All Items</a></li>
+                                            <li><a class="dropdown-item" href="#">Low Stock (< 10)</a>
+                                            </li>
+                                            <li><a class="dropdown-item" href="#">Out of Stock</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Product Name</th>
+                                                    <th>Quantity</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <% if (typeof stockItems !=='undefined' && stockItems.length> 0) { %>
+                                                    <% stockItems.forEach((item, index)=> { %>
+                                                        <tr>
+                                                            <td>
+                                                                <%= index + 1 %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.productName %>
+                                                            </td>
+                                                            <td>
+                                                                <%= item.quantity %>
+                                                            </td>
+                                                            <td>
+                                                                <% if (item.quantity> 20) { %>
+                                                                    <span class="badge bg-success">In Stock</span>
+                                                                    <% } else if (item.quantity> 0) { %>
+                                                                        <span class="badge bg-warning text-dark">Low
+                                                                            Stock</span>
+                                                                        <% } else { %>
+                                                                            <span class="badge bg-danger">Out of
+                                                                                Stock</span>
+                                                                            <% } %>
+                                                            </td>
+                                                            <td class="stock-actions">
+                                                                <button class="btn btn-sm btn-outline-primary"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#editStockModal"
+                                                                    data-id="<%= item.id %>"
+                                                                    data-name="<%= item.productName %>"
+                                                                    data-qty="<%= item.quantity %>">
+                                                                    <i class="bi bi-pencil"></i>
+                                                                </button>
+                                                                <button class="btn btn-sm btn-outline-danger"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#deleteStockModal"
+                                                                    data-id="<%= item.id %>"
+                                                                    data-name="<%= item.productName %>">
+                                                                    <i class="bi bi-trash"></i>
+                                                                </button>
+                                                            </td>
+                                                        </tr>
+                                                        <% }) %>
+                                                            <% } else { %>
+                                                                <tr>
+                                                                    <td colspan="6" class="text-center py-4">
+                                                                        <i
+                                                                            class="bi bi-box-open display-6 text-muted mb-3"></i>
+                                                                        <p class="text-muted">No stock items found. Add
+                                                                            your first stock item to get started.</p>
+                                                                        <button class="btn btn-primary"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#addStockModal">
+                                                                            <i class="bi bi-plus-circle-fill"></i> Add
+                                                                            Stock
+                                                                        </button>
+                                                                    </td>
+                                                                </tr>
+                                                                <% } %>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Pagination -->
+                            <% if (typeof totalPages !=='undefined' && totalPages> 1) { %>
+                                <nav aria-label="Page navigation">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+                                            <a class="page-link" href="?page=<%= currentPage - 1 %>"
+                                                aria-label="Previous">
+                                                <span aria-hidden="true">&laquo;</span>
+                                            </a>
+                                        </li>
+                                        <% for (let i=1; i <=totalPages; i++) { %>
+                                            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                                                <a class="page-link" href="?page=<%= i %>">
+                                                    <%= i %>
+                                                </a>
+                                            </li>
+                                            <% } %>
+                                                <li
+                                                    class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                                    <a class="page-link" href="?page=<%= currentPage + 1 %>"
+                                                        aria-label="Next">
+                                                        <span aria-hidden="true">&raquo;</span>
+                                                    </a>
+                                                </li>
+                                    </ul>
+                                </nav>
+                                <% } %>
+        </div>
+
+        <!-- Add Stock Modal -->
+        <div class="modal fade" id="addStockModal" tabindex="-1" aria-labelledby="addStockModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/stock/add" method="POST">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addStockModalLabel">Add New Stock Item</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="productName" class="form-label">Product Name</label>
+                                <!-- <input type="text" class="form-control" id="productName" name="productName" required> -->
+                                <select class="form-control" name="productName" required>
+                                    <option value="" disabled selected>Select Product</option>
+                                    <option value="T-Shirt" data-price="499">👕 T-Shirt</option>
+                                    <option value="Shirt" data-price="899">👔 Shirt</option>
+                                    <option value="Jeans" data-price="1299">👖 Jeans</option>
+                                    <option value="Jacket" data-price="1999">🧥 Jacket</option>
+                                    <option value="Shoes" data-price="2499">👟 Shoes</option>
+                                    <option value="Cap" data-price="299">🧢 Cap</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="quantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="quantity" name="quantity" min="0"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Add Stock</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Stock Modal -->
+        <div class="modal fade" id="editStockModal" tabindex="-1" aria-labelledby="editStockModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/stock/update" method="POST">
+                        <input type="hidden" id="editId" name="id">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="editStockModalLabel">Edit Stock Item</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="editProductName" class="form-label">Product Name</label>
+                                <input type="text" class="form-control" id="editProductName" name="productName"
+                                    required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="editQuantity" class="form-label">Quantity</label>
+                                <input type="number" class="form-control" id="editQuantity" name="quantity" min="0"
+                                    required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Update Stock</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteStockModal" tabindex="-1" aria-labelledby="deleteStockModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <form action="/stock/delete" method="POST">
+                        <input type="hidden" id="deleteId" name="id">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="deleteStockModalLabel">Confirm Deletion</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Are you sure you want to delete <strong id="deleteProductName"></strong> from stock?</p>
+                            <p class="text-danger">This action cannot be undone.</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-danger">Delete Stock</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Edit modal handler
+            document.addEventListener('DOMContentLoaded', function () {
+                const editModal = document.getElementById('editStockModal');
+                if (editModal) {
+                    editModal.addEventListener('show.bs.modal', function (event) {
+                        const button = event.relatedTarget;
+                        const id = button.getAttribute('data-id');
+                        const name = button.getAttribute('data-name');
+                        const qty = button.getAttribute('data-qty');
+
+                        document.getElementById('editId').value = id;
+                        document.getElementById('editProductName').value = name;
+                        document.getElementById('editQuantity').value = qty;
+                    });
+                }
+
+                // Delete modal handler
+                const deleteModal = document.getElementById('deleteStockModal');
+                if (deleteModal) {
+                    deleteModal.addEventListener('show.bs.modal', function (event) {
+                        const button = event.relatedTarget;
+                        const id = button.getAttribute('data-id');
+                        const name = button.getAttribute('data-name');
+
+                        document.getElementById('deleteId').value = id;
+                        document.getElementById('deleteProductName').textContent = name;
+                    });
+                }
+
+                // Auto-dismiss alerts after 5 seconds
+                setTimeout(() => {
+                    const alerts = document.querySelectorAll('.alert');
+                    alerts.forEach(alert => {
+                        new bootstrap.Alert(alert).close();
+                    });
+                }, 5000);
+            });
+        </script>
+    </body>
+
+    </html>
+    <%- include('footer.ejs') %>
