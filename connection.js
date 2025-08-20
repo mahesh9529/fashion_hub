@@ -2,10 +2,10 @@ var mysql=require("mysql");
 var util=require("util");
 
 var connection=mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"shourya_fashoin_hub"
+    host:"bv27tjwbdybr7ducpzd4-mysql.services.clever-cloud.com",
+    user:"uop3tzwjho8y6f4g",
+    password:"VNAVzBDrgbuMXbGcrna2",
+    database:"bv27tjwbdybr7ducpzd4"
 });
 
 var execute=util.promisify(connection.query).bind(connection);
