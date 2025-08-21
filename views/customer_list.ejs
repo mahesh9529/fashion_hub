@@ -686,50 +686,6 @@
     menuToggle.addEventListener('click', () => {
       navbar.classList.toggle('active');
     });
-
-    // // Search functionality
-    // document.addEventListener('DOMContentLoaded', function () {
-    //   const searchInput = document.getElementById('searchInput');
-
-    //   searchInput.addEventListener('input', function () {
-    //     const filter = searchInput.value.toLowerCase();
-    //     const rows = document.querySelectorAll('.dashboard-table tbody tr');
-
-    //     rows.forEach(row => {
-    //       if (row.classList.contains('customer-total-row')) {
-    //         // Show total rows only if the previous customer row is visible
-    //         const prevRow = row.previousElementSibling;
-    //         let showTotal = false;
-            
-    //         // Find the customer's first row
-    //         let customerFirstRow = prevRow;
-    //         while (customerFirstRow && !customerFirstRow.classList.contains('customer-total-row')) {
-    //           if (customerFirstRow.style.display !== 'none') {
-    //             showTotal = true;
-    //             break;
-    //           }
-    //           customerFirstRow = customerFirstRow.previousElementSibling;
-    //         }
-            
-    //         row.style.display = showTotal ? '' : 'none';
-    //         return;
-    //       }
-          
-    //       const name = row.cells[0]?.textContent.toLowerCase() || '';
-    //       const mobile = row.cells[1]?.textContent.toLowerCase() || '';
-    //       const product = row.cells[2]?.textContent.toLowerCase() || '';
-    //       const date = row.cells[10]?.textContent.toLowerCase() || '';
-
-    //       const match =
-    //         name.includes(filter) ||
-    //         mobile.includes(filter) ||
-    //         product.includes(filter) ||
-    //         date.includes(filter);
-
-    //       row.style.display = match ? '' : 'none';
-    //     });
-    //   });
-    // });
   </script>
 </body>
 
