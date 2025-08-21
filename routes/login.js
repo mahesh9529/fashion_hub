@@ -47,7 +47,7 @@ router.post('/', (req, res) => {
     const { username, password } = req.body;
 
     // 🔹 Replace with your real authentication logic
-    if (username === 'omkarab111@gmail.com' && password === '1234') {
+    if (username === 'omkarab111@gmail.com' && password === '6111') {
         req.session.user = username;      // Save user session
         res.redirect('/');                 // Redirect to admin page
     } else {
