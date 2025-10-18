@@ -1,3 +1,4 @@
+
 <%- include('navbar.ejs') %>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,8 +87,9 @@
     }
 
     .items-header {
+      /* 9 Columns: Product, Size, Qty, Unit Price, Amount, Disc %, Disc Amt, Final Amt, Remove Btn */
+      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 40px; 
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 40px;
       gap: 15px;
       background-color: var(--secondary-color);
       color: white;
@@ -98,8 +100,9 @@
     }
 
     .item-row {
-      display: grid;
+      /* 9 Columns: Product, Size, Qty, Unit Price, Amount, Disc %, Disc Amt, Final Amt, Remove Btn */
       grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 40px;
+      display: grid;
       gap: 15px;
       padding: 12px 15px;
       align-items: center;
@@ -213,430 +216,167 @@
     }
 
     /* Style for the product and size dropdowns */
-.product-group .stylish-select,
-.size-group .stylish-select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  padding: 8px 12px;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  background-color: white;
-  font-size: 14px;
-  color: #333;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 12px;
-}
+    .product-group .stylish-select,
+    .size-group .stylish-select {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      padding: 8px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      background-color: white;
+      font-size: 14px;
+      color: #333;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      background-size: 12px;
+    }
 
-/* Hover state */
-.product-group .stylish-select:hover,
-.size-group .stylish-select:hover {
-  border-color: #aaa;
-}
+    /* Hover state */
+    .product-group .stylish-select:hover,
+    .size-group .stylish-select:hover {
+      border-color: #aaa;
+    }
 
-/* Focus state */
-.product-group .stylish-select:focus,
-.size-group .stylish-select:focus {
-  outline: none;
-  border-color: #4a90e2;
-  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
-}
+    /* Focus state */
+    .product-group .stylish-select:focus,
+    .size-group .stylish-select:focus {
+      outline: none;
+      border-color: #4a90e2;
+      box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+    }
 
-/* Style for the product dropdown specifically */
-.product-group .stylish-select {
-  background-color: #f8f9fa;
-  border-color: #ced4da;
-}
+    /* Style for the product dropdown specifically */
+    .product-group .stylish-select {
+      background-color: #f8f9fa;
+      border-color: #ced4da;
+    }
 
-/* Style for the size dropdown specifically */
-.size-group .stylish-select {
-  background-color: #f1f8ff;
-  border-color: #b3d7ff;
-}
+    /* Style for the size dropdown specifically */
+    .size-group .stylish-select {
+      background-color: #f1f8ff;
+      border-color: #b3d7ff;
+    }
 
-/* Style for optgroups */
-.stylish-select optgroup {
-  font-weight: bold;
-  color: #555;
-  font-style: normal;
-  background-color: #f5f5f5;
-}
+    /* Style for optgroups */
+    .stylish-select optgroup {
+      font-weight: bold;
+      color: #555;
+      font-style: normal;
+      background-color: #f5f5f5;
+    }
 
-/* Style for options */
-.stylish-select option {
-  padding: 8px;
-  background-color: white;
-  color: #333;
-}
+    /* Style for options */
+    .stylish-select option {
+      padding: 8px;
+      background-color: white;
+      color: #333;
+    }
+    
+    /* ----------------------------------------------------- */
+    /* RESPONSIVE CSS - Final Amt Column Display Fix Included */
+    /* ----------------------------------------------------- */
 
-/* Keep the existing styles for other inputs */
-/* .quantity, 
-.price_per_unit, 
-.amount, 
-.discount_percent, 
-.discount_amount, 
-.total_after_discount {
-  /* Your existing input styles remain unchanged */
+    /* Large Desktops (1200px and above) - Default 9 columns */
+    @media (min-width: 1200px) {
+      .container { margin: 30px auto; padding: 30px; }
+      .header h2 { font-size: 28px; }
+      .form-control { padding: 12px 15px; }
+      .btn { padding: 12px 20px; font-size: 16px; }
+    }
 
-
-    @media (max-width: 1024px) {
+    /* Laptops (992px - 1199px) - Hiding Disc % (6th column) */
+    @media (max-width: 1199px) {
+      /* Grid template adjusted for 8 visible columns */
       .items-header, .item-row {
-        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 40px;
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 40px; 
+      }
+      /* Hide Disc % column (6th child) */
+      .items-header span:nth-child(6),
+      .item-row > div:nth-child(6) {
+        display: none; 
       }
     }
 
-    @media (max-width: 768px) {
+    /* Tablets (768px - 991px) - Hiding Disc Amt (7th column) */
+    @media (max-width: 991px) {
+      /* Grid template adjusted for 7 visible columns */
+      .items-header, .item-row {
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 40px; 
+      }
+      /* Hide Disc Amt column (7th child - original index, now 6th grid item) */
+      .items-header span:nth-child(7), 
+      .item-row > div:nth-child(7) {
+        display: none; 
+      }
+    }
+
+    /* Tablets (576px - 767px) - Hiding Unit Price (4th column) */
+    @media (max-width: 767px) {
+      /* Grid template adjusted for 6 visible columns */
+      .items-header, .item-row {
+        grid-template-columns: 2fr 1fr 1fr 1fr 1fr 40px;
+      }
+      /* Hide Unit Price column (4th child) */
+      .items-header span:nth-child(4),
+      .item-row > div:nth-child(4) {
+        display: none;
+      }
+      .action-buttons { flex-direction: column; }
+      .btn { width: 100%; margin-bottom: 10px; }
+    }
+
+    /* Mobile Phones (480px - 575px) - Hiding Amount (5th column) */
+    @media (max-width: 575px) {
+      /* Grid template adjusted for 5 visible columns */
+      .items-header, .item-row {
+        grid-template-columns: 2fr 1fr 1fr 1fr 40px;
+      }
+      /* Hide Amount column (5th child) */
+      .items-header span:nth-child(5),
+      .item-row > div:nth-child(5) {
+        display: none;
+      }
+      .container { padding: 15px; }
+      .header h2 { font-size: 20px; }
+    }
+
+    /* Mobile Phones (320px - 479px) - 
+       🔥 FIX: Final Amt (8th column) is intentionally NOT hidden here, 
+          but grid is narrowed, forcing horizontal scroll. */
+    @media (max-width: 479px) {
+      .items-header, .item-row {
+        /* Grid template narrowed for very small screens */
+        grid-template-columns: 2fr 1fr 1fr 40px; 
+      }
+      /* Hide Qty column (3rd column) - temporarily */
+      .items-header span:nth-child(3),
+      .item-row > div:nth-child(3) {
+        display: none;
+      }
+      /* ❌ We are removing the display:none rule for the 8th child (Final Amt) here to ensure visibility */
+      /* Final Amt remains visible */
+    }
+
+    /* Print Styles */
+    @media print {
+      body * { visibility: hidden; }
+      .container, .container * { visibility: visible; }
       .container {
-        padding: 20px;
+        position: absolute; left: 0; top: 0; width: 100%; margin: 0;
+        padding: 10px; box-shadow: none;
       }
-      
-      .action-buttons {
-        flex-direction: column;
+      /* Print: Show all columns */
+      .items-header, .item-row {
+          grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 0px !important;
       }
-      
-      .btn {
-        width: 100%;
-        justify-content: center;
-      }
-      
-      .totals-container {
-        flex-direction: column;
-        gap: 15px;
-        align-items: flex-end;
-      }
+      .action-buttons, .remove-btn { display: none !important; }
     }
   </style>
-
-  <style>
-  /* Base Styles (All Devices) */
-  :root {
-    --primary-color: #4361ee;
-    --secondary-color: #3a0ca3;
-    --accent-color: #f72585;
-    --success-color: #4cc9f0;
-    --light-bg: #f8f9fa;
-    --dark-text: #2b2d42;
-    --border-color: #e9ecef;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-
-  body {
-    font-family: 'Poppins', sans-serif;
-    background-color: var(--light-bg);
-    color: var(--dark-text);
-    margin: 0;
-    padding: 0;
-  }
-
-  .container {
-    max-width: 1080px;
-    margin: 20px auto;
-    padding: 20px;
-    background: white;
-    border-radius: 12px;
-    box-shadow: var(--shadow);
-  }
-
-  .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid var(--primary-color);
-  }
-
-  .header h2 {
-    color: var(--secondary-color);
-    margin: 0;
-    font-size: 24px;
-    font-weight: 600;
-  }
-
-  /* Form Elements */
-  .form-group {
-    margin-bottom: 15px;
-  }
-
-  .form-control {
-    width: 100%;
-    padding: 10px 12px;
-    border: 1px solid var(--border-color);
-    border-radius: 8px;
-    font-size: 14px;
-  }
-
-  /* Items Table */
-  .items-header, .item-row {
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 40px;
-    gap: 10px;
-    padding: 10px;
-    align-items: center;
-  }
-
-  .items-header {
-    background-color: var(--secondary-color);
-    color: white;
-    border-radius: 8px 8px 0 0;
-  }
-
-  .item-row {
-    border-bottom: 1px solid var(--border-color);
-  }
-
-  /* Buttons */
-  .btn {
-    padding: 10px 15px;
-    border: none;
-    border-radius: 6px;
-    font-size: 14px;
-    cursor: pointer;
-  }
-
-  .btn-primary {
-    background-color: var(--primary-color);
-    color: white;
-  }
-
-  /* ==================== */
-  /* Responsive Breakpoints */
-  /* ==================== */
-
-  /* Large Desktops (1200px and above) */
-  @media (min-width: 1200px) {
-    .container {
-      margin: 30px auto;
-      padding: 30px;
-    }
-    .header h2 {
-      font-size: 28px;
-    }
-    .form-control {
-      padding: 12px 15px;
-    }
-    .btn {
-      padding: 12px 20px;
-      font-size: 16px;
-    }
-  }
-
-  /* Laptops (992px - 1199px) */
-  @media (max-width: 1199px) {
-    .items-header, .item-row {
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 40px;
-    }
-    /* Hide discount % column */
-    .items-header span:nth-child(6),
-    .item-row > div:nth-child(6) {
-      display: none;
-    }
-  }
-
-  /* Tablets (768px - 991px) - Landscape */
-  @media (max-width: 991px) {
-    .items-header, .item-row {
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 40px;
-    }
-    /* Hide discount amount column */
-    .items-header span:nth-child(7),
-    .item-row > div:nth-child(7) {
-      display: none;
-    }
-  }
-
-  /* Tablets (576px - 767px) - Portrait */
-  @media (max-width: 767px) {
-    .items-header, .item-row {
-      grid-template-columns: 2fr 1fr 1fr 1fr 40px;
-    }
-    /* Hide unit price column */
-    .items-header span:nth-child(4),
-    .item-row > div:nth-child(4) {
-      display: none;
-    }
-    .action-buttons {
-      flex-direction: column;
-    }
-    .btn {
-      width: 100%;
-      margin-bottom: 10px;
-    }
-  }
-
-  /* Mobile Phones (480px - 575px) - Landscape */
-  @media (max-width: 575px) {
-    .container {
-      padding: 15px;
-    }
-    .items-header, .item-row {
-      grid-template-columns: 2fr 1fr 1fr 40px;
-    }
-    /* Hide amount column */
-    .items-header span:nth-child(5),
-    .item-row > div:nth-child(5) {
-      display: none;
-    }
-    .header h2 {
-      font-size: 20px;
-    }
-  }
-
-  /* Mobile Phones (320px - 479px) - Portrait */
-  @media (max-width: 479px) {
-    .items-header, .item-row {
-      grid-template-columns: 2fr 1fr 40px;
-    }
-    /* Hide final amount column */
-    .items-header span:nth-child(8),
-    .item-row > div:nth-child(8) {
-      display: none;
-    }
-    .form-control {
-      padding: 8px 10px;
-      font-size: 13px;
-    }
-    .header {
-      flex-direction: column;
-      align-items: flex-start;
-    }
-  }
-
-  /* Mobile Responsive CSS with All Columns Visible */
-@media screen and (max-width: 319px) {
-  /* Container adjustments */
-  .container {
-    padding: 8px;
-    width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Table container with forced horizontal scroll */
-  .items-table-container {
-    min-width: 600px; /* Wide enough to show all columns */
-    position: relative;
-  }
-
-  /* Visual hint for scrolling */
-  .items-table-container::after {
-    content: "→ Scroll to see all columns →";
-    position: absolute;
-    right: 10px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #4361ee;
-    font-size: 12px;
-    animation: pulse 2s infinite;
-    background: rgba(255,255,255,0.8);
-    padding: 5px 10px;
-    border-radius: 15px;
-    display: block;
-  }
-
-  @keyframes pulse {
-    0% { opacity: 0.5; }
-    50% { opacity: 1; }
-    100% { opacity: 0.5; }
-  }
-
-  /* Table header and row styling */
-  .items-header, .item-row {
-    grid-template-columns: 120px 60px 60px 60px 60px 60px 60px 40px;
-  }
-
-  /* Cell sizing */
-  .items-header span, 
-  .item-row > div {
-    min-width: 60px;
-    font-size: 12px;
-    padding: 5px 3px;
-  }
-
-  /* Product name column wider */
-  .item-row > div:first-child {
-    min-width: 120px;
-  }
-
-  /* Input fields */
-  .form-control {
-    padding: 6px 4px;
-    font-size: 12px;
-    min-height: 30px;
-  }
-
-  /* Buttons */
-  .btn {
-    padding: 8px 10px;
-    font-size: 12px;
-    min-width: 80px;
-  }
-
-  /* Floating print button */
-  .no-print {
-    position: fixed;
-    bottom: 15px;
-    right: 15px;
-    z-index: 1000;
-  }
-
-  /* Print styles (same for all devices) */
-  @media print {
-    body > *:not(.container):not(.container *) {
-      display: none !important;
-    }
-    
-    .container {
-      width: 100% !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      overflow: visible !important;
-    }
-    
-    .items-header, .item-row {
-      grid-template-columns: 2fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr !important;
-      min-width: 100% !important;
-    }
-    
-    .no-print, .remove-btn, .action-buttons {
-      display: none !important;
-    }
-    
-    input[readonly] {
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-  }
-}
-
-  /* Print Styles */
-  @media print {
-    body * {
-      visibility: hidden;
-    }
-    .container, .container * {
-      visibility: visible;
-    }
-    .container {
-      position: absolute;
-      left: 0;
-      top: 0;
-      width: 100%;
-      margin: 0;
-      padding: 10px;
-      box-shadow: none;
-    }
-    .action-buttons, .remove-btn {
-      display: none !important;
-    }
-  }
-</style>
 </head>
 <body>
   <div class="container" >
@@ -644,7 +384,7 @@
       <h2><i class="fas fa-file-invoice-dollar"></i> Billing Form</h2>
     </div>
 
-        <form id="billForm" action="/billing_system" method="POST" autocomplete="off">
+    <form id="billForm" action="/billing_system" method="POST" autocomplete="off">
       <div class="form-group" style="display: flex; gap: 20px; align-items: flex-end;">
         <div style="flex: 1;">
           <label for="customer_name">Customer Name</label>
@@ -671,26 +411,28 @@
       <div id="itemContainer">
         <div class="item-row">
           <div class="form-group product-group" style="min-width: 160px; position: relative; top:10px;">
-            <label for="product" class="visually-hidden">Product</label>
-            <select class="product stylish-select" name="product" required>
-              <option value="" disabled selected>Select Product</option>
-              <option value="T-Shirt" data-price="499">👕 T-Shirt</option>
-              <option value="Shirt" data-price="899">👔 Shirt</option>
-              <option value="Jeans" data-price="1299">👖 Jeans</option>
-              <option value="Jacket" data-price="1999">🧥 Jacket</option>
-              <option value="Shoes" data-price="2499">👟 Shoes</option>
-              <option value="Cap" data-price="299">🧢 Cap</option>
+            <select class="product stylish-select" name="product[]" required style="padding-right:25px;">
+              <option value="" disabled selected> Select Product </option>
+              <option value="T-Shirt" >👕 T-Shirt</option>
+              <option value="Shirt">👔 Shirt</option>
+              <option value="Jeans">👖 Jeans</option>
+              <option value="Jacket">🧥 Jacket</option>
+              <option value="Shoes">👟 Shoes</option>
+              <option value="Cap">🧢 Cap</option>
             </select>
           </div>
-          <div class="form-group size-group" style="min-width: 100px; position: relative; top:8px;">
-            <label for="size" class="visually-hidden">Size</label>
-            <select name="size" class="stylish-select" required>
+          <div class="form-group size-group" style="min-width: 130px; position: relative; top:10px;">
+            <select name="size[]" class="stylish-select" required>
               <option value="" disabled selected>Size</option>
               <optgroup label="Alpha">
                 <option value="S">S</option>
                 <option value="M" selected>M</option>
                 <option value="L">L</option>
                 <option value="XL">XL</option>
+                <option value="XL">XXL</option>
+                <option value="XL">XXXL</option>
+
+
               </optgroup>
               <optgroup label="Numeric">
                 <option value="28">28</option>
@@ -703,12 +445,13 @@
               </optgroup>
             </select>
           </div>
-          <div><input type="number" name="quantity[]" class="quantity" min="1" placeholder="Qty" required></div>
-          <div><input type="number" name="price_per_unit[]" class="price_per_unit" min="0" step="0.01" placeholder="Price" required></div>
-          <div><input type="number" name="amount[]" class="amount" placeholder="Amount" readonly></div>
+          <div><input type="number" name="quantity[]" class="quantity" min="1" placeholder="Qty" value="1" required></div>
+          <div><input type="number" name="price_per_unit[]" class="price_per_unit" min="0" placeholder="Price" value="0" required></div>
+          <div><input type="number" name="amount[]" class="amount" placeholder="Amount" value="0.00" readonly></div>
           <div><input type="number" name="discount_percent[]" class="discount_percent" min="0" max="100" placeholder="%" value="0"></div>
-          <div><input type="number" name="discount_amount[]" class="discount_amount" placeholder="Discount" readonly></div>
-          <div><input type="number" name="Total_after_Discount[]" class="total_after_discount" placeholder="Total" readonly></div>
+          <div><input type="number" name="discount_amount[]" class="discount_amount" placeholder="Discount" value="0.00" readonly></div>
+          <div><input type="number" name="Total_after_Discount[]" class="total_after_discount" placeholder="Total" value="0.00" readonly></div>
+
           <div>
             <button type="button" class="remove-btn" disabled>
               <i class="fas fa-trash"></i>
@@ -723,16 +466,10 @@
         </button>
         <input type="hidden" name="action" value="submit_bill" id="formAction">
 
-        
         <button type="submit" class="btn btn-success submit-print-btn" style="padding: 10px 28px; font-size: 1.1rem; border-radius: 6px; font-weight: 600; box-shadow: 0 2px 8px rgba(40,167,69,0.08); display: flex; align-items: center; gap: 8px;">
           <i class="fas fa-print"></i>
           Submit &amp; Print
         </button>
-
-  <!-- <button type="button" class="btn btn-success" id="submitPrintBtn">
-    <i class="fas fa-check-circle"></i> Submit & Print
-  </button> -->
-        
       </div>
 
       <div class="totals-container">
@@ -748,120 +485,128 @@
     </form>
   </div>
 
-  <script>
+<script>
+    // ------------------------------------------------------------------
+    // 1. Core Calculation Function (Final Amt )
+    // ------------------------------------------------------------------
     function calculateRow(row) {
-      const qty = parseFloat(row.querySelector(".quantity").value) || 0;
-      const price = parseFloat(row.querySelector(".price_per_unit").value) || 0;
-      const discount = parseFloat(row.querySelector(".discount_percent").value) || 0;
+        const qty = parseFloat(row.querySelector(".quantity").value) || 0;
+        const price = parseFloat(row.querySelector(".price_per_unit").value) || 0;
+        const discountPercent = parseFloat(row.querySelector(".discount_percent").value) || 0;
 
-      const amount = qty * price;
-      const discountAmt = amount * (discount / 100);
-      const total = amount - discountAmt;
+        const amount = qty * price;
+        const discountAmt = amount * (discountPercent / 100);
+        const totalAfterDiscount = amount - discountAmt; 
 
-      row.querySelector(".amount").value = amount.toFixed(2);
-      row.querySelector(".discount_amount").value = discountAmt.toFixed(2);
-      row.querySelector(".total_after_discount").value = total.toFixed(2);
+        row.querySelector(".amount").value = amount.toFixed(2);
+        row.querySelector(".discount_amount").value = discountAmt.toFixed(2);
+        
+        row.querySelector(".total_after_discount").value = totalAfterDiscount.toFixed(2); 
 
-      calculateGrandTotal();
+        calculateGrandTotal(); 
     }
 
     function calculateGrandTotal() {
-      let total = 0;
-      let totalDiscount = 0;
+        let grandTotalAfterDiscount = 0;
+        let grandTotalDiscount = 0;
 
-      document.querySelectorAll(".item-row").forEach(row => {
-        total += parseFloat(row.querySelector(".total_after_discount").value) || 0;
-        totalDiscount += parseFloat(row.querySelector(".discount_amount").value) || 0;
-      });
+        document.querySelectorAll(".item-row").forEach(row => {
+            grandTotalAfterDiscount += parseFloat(row.querySelector(".total_after_discount").value) || 0;
+            grandTotalDiscount += parseFloat(row.querySelector(".discount_amount").value) || 0;
+        });
 
-      document.getElementById("grandTotal").textContent = total.toFixed(2);
-      document.getElementById("grandDiscount").textContent = totalDiscount.toFixed(2);
+        document.getElementById("grandTotal").textContent = grandTotalAfterDiscount.toFixed(2);
+        document.getElementById("grandDiscount").textContent = grandTotalDiscount.toFixed(2);
+    }
+    
+    function setupRowListeners(row) {
+        
+        const productSelect = row.querySelector(".product.stylish-select");
+        productSelect.addEventListener("change", function(e) {
+            const selectedOption = e.target.options[e.target.selectedIndex];
+            const price = selectedOption.getAttribute('data-price');
+            const priceInput = row.querySelector(".price_per_unit");
+            const qtyInput = row.querySelector(".quantity");
+
+            if (price) {
+                priceInput.value = parseFloat(price).toFixed(2);
+                if (!qtyInput.value || parseFloat(qtyInput.value) === 0) {
+                     qtyInput.value = 1; 
+                }
+            } else {
+                priceInput.value = "0.00"; 
+            }
+            calculateRow(row); 
+        });
+
+        row.addEventListener("input", function(e) {
+            if (
+                e.target.classList.contains("quantity") ||
+                e.target.classList.contains("price_per_unit") ||
+                e.target.classList.contains("discount_percent")
+            ) {
+                calculateRow(row);
+            }
+        });
+        
+        // 3c. Remove Button Listener
+        const removeBtn = row.querySelector(".remove-btn");
+        removeBtn.addEventListener("click", function() {
+            if (document.querySelectorAll(".item-row").length > 1) {
+                row.remove();
+                calculateGrandTotal();
+            }
+             if (document.querySelectorAll(".item-row").length === 1) {
+                 document.querySelector(".item-row .remove-btn").disabled = true;
+            }
+        });
+        
+        if (document.querySelectorAll(".item-row").length > 1) {
+             removeBtn.disabled = false;
+        } else {
+             removeBtn.disabled = true;
+        }
     }
 
-    document.addEventListener("input", function (e) {
-      if (
-        e.target.classList.contains("quantity") ||
-        e.target.classList.contains("price_per_unit") ||
-        e.target.classList.contains("discount_percent")
-      ) {
-        calculateRow(e.target.closest(".item-row"));
-      }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.querySelectorAll(".item-row").forEach(row => {
+            setupRowListeners(row);
+            calculateRow(row); 
+        });
+        calculateGrandTotal();
     });
 
     document.getElementById("addItem").addEventListener("click", function () {
-      const container = document.getElementById("itemContainer");
-      const newRow = container.querySelector(".item-row").cloneNode(true);
+        const container = document.getElementById("itemContainer");
+        const firstRow = container.querySelector(".item-row");
+        const newRow = firstRow.cloneNode(true); 
+        
+        newRow.querySelectorAll("input").forEach(input => {
+            if (input.classList.contains("discount_percent")) {
+                input.value = "0";
+            } else if (input.readOnly) {
+                input.value = "0.00"; 
+            } else {
+                input.value = ""; 
+            }
+        });
+        
+        newRow.querySelector(".product.stylish-select").value = "";
+        newRow.querySelector(".size-group .stylish-select").value = "M"; 
+        
+        setupRowListeners(newRow); 
 
-      newRow.querySelectorAll("input").forEach(input => {
-        if (input.classList.contains("discount_percent")) {
-          input.value = "0";
-        } else {
-          input.value = "";
-        }
-      });
-
-      // Enable remove button for new row
-      const removeBtn = newRow.querySelector(".remove-btn");
-      removeBtn.disabled = false;
-      removeBtn.addEventListener("click", function() {
-        if (document.querySelectorAll(".item-row").length > 1) {
-          newRow.remove();
-          calculateGrandTotal();
-        }
-      });
-
-      container.appendChild(newRow);
+        container.appendChild(newRow);
+        
+        document.querySelectorAll(".item-row .remove-btn").forEach(btn => {
+            btn.disabled = false;
+        });
+        
+        calculateGrandTotal(); 
     });
-
-    // Initialize first row
-    document.addEventListener("DOMContentLoaded", function() {
-      calculateGrandTotal();
-    });
-  </script>
-
-
-<!-- <script>
-  document.getElementById('submitPrintBtn').addEventListener('click', function () {
-    const form = document.getElementById('billForm');
-
-    // Create a hidden iframe to submit without reloading
-    const iframe = document.createElement('iframe');
-    iframe.name = 'hidden_iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
-
-    form.target = 'hidden_iframe'; // Submit form to hidden iframe
-    form.submit();                 // Submit the form (data gets saved in DB)
-
-    // Delay before triggering print
-    setTimeout(() => {
-      window.print();              // Trigger print
-    }, 1000);
-  });
-</script> -->
-
-
-<script>
-  document.getElementById("billingForm").addEventListener("submit", async function (e) {
-    e.preventDefault(); // default form submit बंद करा
-
-    const form = e.target;
-    const formData = new FormData(form);
-    const response = await fetch("/billing_system", {
-      method: "POST",
-      body: formData
-    });
-
-    const result = await response.json();
-    if (result.success) {
-      // ✅ bill_print/:id नव्या टॅबमध्ये उघडा
-      window.open(`/bill_print/${result.billId}`, "_blank");
-    } else {
-      alert("Failed to save bill");
-    }
-  });
+    
+   
 </script>
-
-
 </body>
 </html>
