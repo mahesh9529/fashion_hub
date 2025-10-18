@@ -168,9 +168,9 @@ router.get('/billing_page', function (req, res) {
 
 // Add stock
 
+// ==================== Billing System POST ====================
 router.post("/billing_system", async function (req, res) {
   const {
-    action,
     customer_name,
     mobile,
     product,
@@ -184,6 +184,7 @@ router.post("/billing_system", async function (req, res) {
   } = req.body;
 
   try {
+    // Ensure arrays even if single row
     const products = Array.isArray(product) ? product : [product];
     const quantities = Array.isArray(quantity) ? quantity : [quantity];
     const sizes = Array.isArray(size) ? size : [size];
@@ -196,14 +197,14 @@ router.post("/billing_system", async function (req, res) {
     let lastInsertId = null;
 
     for (let i = 0; i < products.length; i++) {
-      if (!products[i] || !quantities[i]) continue;
+      if (!products[i] || !quantities[i]) continue; // skip empty rows
 
-      // Insert into bill with billing_date + billing_time auto set
       const sql = `
         INSERT INTO bill
         (customer_name, mobile, product, size, quantity, price_per_unit, amount, discount_percent, discount_amount, Total_after_Discount, billing_date, billing_time)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), NOW())
       `;
+
       const result = await exe(sql, [
         customer_name,
         mobile,
@@ -219,7 +220,7 @@ router.post("/billing_system", async function (req, res) {
 
       lastInsertId = result.insertId;
 
-      // Update stock
+      // Update stock if exists
       const stockCheck = await exe("SELECT quantity FROM stock WHERE productName = ?", [products[i]]);
       if (stockCheck.length > 0) {
         let currentQty = parseInt(stockCheck[0].quantity);
@@ -231,18 +232,18 @@ router.post("/billing_system", async function (req, res) {
     }
 
     if (lastInsertId) {
-      res.redirect(`/bill_print/${lastInsertId}`);
+      // ✅ Return JSON for fetch frontend
+      res.json({ success: true, billId: lastInsertId });
     } else {
-      res.send("No valid product rows submitted.");
+      res.json({ success: false, message: "No valid product rows submitted." });
     }
   } catch (err) {
     console.error("Billing Error:", err);
-    res.status(500).send("Database Insert Failed");
+    res.status(500).json({ success: false, message: "Database Insert Failed" });
   }
 });
 
 // ==================== Fetch Today's Bills by Mobile ====================
-// Fetch today's bill by mobile
 router.get("/fetch_bill/:mobile", async (req, res) => {
   try {
     const mobile = req.params.mobile;
@@ -255,15 +256,17 @@ router.get("/fetch_bill/:mobile", async (req, res) => {
     const bills = await exe(sql, [mobile]);
 
     if (bills.length > 0) {
-      res.json(bills); // 👉 JSON response देतोय
+      res.json(bills);
     } else {
-      res.status(404).send("No bills found for today.");
+      res.status(404).json({ message: "No bills found for today." });
     }
   } catch (err) {
     console.error("Error fetching bill:", err);
-    res.status(500).send("Error fetching bill");
+    res.status(500).json({ message: "Error fetching bill" });
   }
 });
+
+// ==================== Bill Print ====================
 router.get("/bill_print/:id", async function (req, res) {
   const billId = req.params.id;
 
@@ -287,8 +290,6 @@ router.get("/bill_print/:id", async function (req, res) {
     res.status(500).send("Error loading bill");
   }
 });
-
-
 
 
 
