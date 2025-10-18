@@ -170,112 +170,126 @@ router.get('/billing_page', function (req, res) {
 
 // ==================== Billing System POST ====================
 router.post("/billing_system", async function (req, res) {
-    const {
-        action,
+  const {
+    action,
+    customer_name,
+    mobile,
+    product,
+    size,
+    quantity,
+    price_per_unit,
+    amount,
+    discount_percent,
+    discount_amount,
+    Total_after_Discount
+  } = req.body;
+
+  try {
+    const products = Array.isArray(product) ? product : [product];
+    const quantities = Array.isArray(quantity) ? quantity : [quantity];
+    const sizes = Array.isArray(size) ? size : [size];
+    const prices = Array.isArray(price_per_unit) ? price_per_unit : [price_per_unit];
+    const amounts = Array.isArray(amount) ? amount : [amount];
+    const discounts = Array.isArray(discount_percent) ? discount_percent : [discount_percent];
+    const discountAmounts = Array.isArray(discount_amount) ? discount_amount : [discount_amount];
+    const totals = Array.isArray(Total_after_Discount) ? Total_after_Discount : [Total_after_Discount];
+
+    let lastInsertId = null;
+
+    for (let i = 0; i < products.length; i++) {
+      if (!products[i] || !quantities[i]) continue;
+
+      // Insert into bill with billing_date + billing_time auto set
+      const sql = `
+        INSERT INTO bill
+        (customer_name, mobile, product, size, quantity, price_per_unit, amount, discount_percent, discount_amount, Total_after_Discount, billing_date, billing_time)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), NOW())
+      `;
+      const result = await exe(sql, [
         customer_name,
         mobile,
-        product,
-        size,
-        quantity,
-        price_per_unit,
-        amount,
-        discount_percent,
-        discount_amount,
-        Total_after_Discount
-    } = req.body;
+        products[i],
+        sizes[i],
+        quantities[i],
+        prices[i],
+        amounts[i],
+        discounts[i],
+        discountAmounts[i],
+        totals[i]
+      ]);
 
-    try {
-        const products = Array.isArray(product) ? product : [product];
-        const quantities = Array.isArray(quantity) ? quantity : [quantity];
-        const sizes = Array.isArray(size) ? size : [size];
-        const prices = Array.isArray(price_per_unit) ? price_per_unit : [price_per_unit];
-        const amounts = Array.isArray(amount) ? amount : [amount];
-        const discounts = Array.isArray(discount_percent) ? discount_percent : [discount_percent];
-        const discountAmounts = Array.isArray(discount_amount) ? discount_amount : [discount_amount];
-        const totals = Array.isArray(Total_after_Discount) ? Total_after_Discount : [Total_after_Discount];
+      lastInsertId = result.insertId;
 
-        let lastInsertId = null;
+      // Update stock
+      const stockCheck = await exe("SELECT quantity FROM stock WHERE productName = ?", [products[i]]);
+      if (stockCheck.length > 0) {
+        let currentQty = parseInt(stockCheck[0].quantity);
+        let soldQty = parseInt(quantities[i]);
+        let newQty = Math.max(currentQty - soldQty, 0);
 
-        for (let i = 0; i < products.length; i++) {
-            if (!products[i] || !quantities[i]) continue;
-
-            // 1. Bill मध्ये Insert करा
-            const sql = `
-                INSERT INTO bill
-                (customer_name, mobile, product, size, quantity, price_per_unit, amount, discount_percent, discount_amount, Total_after_Discount, billing_date, billing_time)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURDATE(), NOW())
-            `;
-            const result = await exe(sql, [
-                customer_name,
-                mobile,
-                products[i],
-                sizes[i],
-                quantities[i],
-                prices[i],
-                amounts[i],
-                discounts[i],
-                discountAmounts[i],
-                totals[i]
-            ]);
-
-            lastInsertId = result.insertId; 
-
-            // 2. Stock Update करा
-            const stockCheck = await exe("SELECT quantity FROM stock WHERE productName = ?", [products[i]]);
-            if (stockCheck.length > 0) {
-                let currentQty = parseInt(stockCheck[0].quantity);
-                let soldQty = parseInt(quantities[i]);
-                let newQty = Math.max(currentQty - soldQty, 0);
-
-                await exe("UPDATE stock SET quantity = ? WHERE productName = ?", [newQty, products[i]]);
-            }
-        }
-
-        // 🔥 सुधारणा: Client Side JavaScript ला JSON Response द्या
-        if (lastInsertId) {
-            return res.json({
-                success: true,
-                billId: lastInsertId 
-            });
-        } else {
-            return res.json({
-                success: false,
-                message: "No valid product rows submitted or saved."
-            });
-        }
-    } catch (err) {
-        console.error("Billing Error:", err);
-        // त्रुटी आल्यास 500 status आणि JSON Response परत करा
-        return res.status(500).json({
-            success: false,
-            message: "Database Insert Failed. Check server console for details."
-        });
+        await exe("UPDATE stock SET quantity = ? WHERE productName = ?", [newQty, products[i]]);
+      }
     }
+
+    if (lastInsertId) {
+      res.redirect(`/bill_print/${lastInsertId}`);
+    } else {
+      res.send("No valid product rows submitted.");
+    }
+  } catch (err) {
+    console.error("Billing Error:", err);
+    res.status(500).send("Database Insert Failed");
+  }
 });
-// ==================== Bill Print ====================
+
+// ==================== Fetch Today's Bills by Mobile ====================
+// Fetch today's bill by mobile
+router.get("/fetch_bill/:mobile", async (req, res) => {
+  try {
+    const mobile = req.params.mobile;
+
+    const sql = `
+      SELECT * FROM bill 
+      WHERE mobile = ? 
+      AND billing_date = CURDATE()
+    `;
+    const bills = await exe(sql, [mobile]);
+
+    if (bills.length > 0) {
+      res.json(bills); // 👉 JSON response देतोय
+    } else {
+      res.status(404).send("No bills found for today.");
+    }
+  } catch (err) {
+    console.error("Error fetching bill:", err);
+    res.status(500).send("Error fetching bill");
+  }
+});
 router.get("/bill_print/:id", async function (req, res) {
-    const billId = req.params.id;
+  const billId = req.params.id;
 
-    try {
-        // STEP 1: Get the bill using id
-        const one = await exe("SELECT * FROM bill WHERE id = ?", [billId]);
+  try {
+    // STEP 1: Get the bill using id
+    const one = await exe("SELECT * FROM bill WHERE id = ?", [billId]);
 
-        if (!one || one.length === 0) return res.send("Bill not found");
+    if (!one || one.length === 0) return res.send("Bill not found");
 
-        const mobile = one[0].mobile;
+    const mobile = one[0].mobile;
 
-        // STEP 2: Fetch only today's entries for that mobile
-        const all = await exe(
-            "SELECT * FROM bill WHERE mobile = ? AND billing_date = CURDATE() ORDER BY id ASC",
-            [mobile]
-        );
+    // STEP 2: Fetch only today's entries for that mobile
+    const all = await exe(
+      "SELECT * FROM bill WHERE mobile = ? AND billing_date = CURDATE() ORDER BY id ASC",
+      [mobile]
+    );
 
-        res.render("bill_print.ejs", { data: all, customer: one[0] });
-    } catch (err) {
-        console.error("Error fetching bill:", err);
-        res.status(500).send("Error loading bill");
-    }
+    res.render("bill_print.ejs", { data: all, customer: one[0] });
+  } catch (err) {
+    console.error("Error fetching bill:", err);
+    res.status(500).send("Error loading bill");
+  }
 });
+
+
 
 
 
