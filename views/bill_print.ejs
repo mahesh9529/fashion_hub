@@ -7,45 +7,50 @@
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #fff;
-      color: #000;
+      background: #f8f9fa;
+      color: #222;
       margin: 0;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      padding:20px;
     }
 
     .bill-container {
-      width: 420px;
+      max-width: 420px;
+      margin: 30px auto;
       background: #fff;
       border-radius: 12px;
+      box-shadow: 0 4px 24px rgba(44, 62, 80, 0.10);
       padding: 32px 28px 24px 28px;
       border: 1.5px solid #000;
-      color: #000;
-      box-sizing: border-box;
-      text-align: center;
     }
 
     .bill-header {
       text-align: center;
       margin-bottom: 18px;
-      color: #000;
     }
 
-    .bill-header h2 {
-      font-size: 2rem;
-      font-weight: 800;
-      margin-bottom: 4px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    @media print {
+      .bill-header h2 {
+        background: none !important;
+        -webkit-background-clip: initial !important;
+        -webkit-text-fill-color: #000 !important;
+        color: #000 !important;
+      }
     }
 
     img {
       max-width: 100%;
-      width: 150px;
+      width:150px;
       height: 170px;
-      filter: grayscale(100%) contrast(100%);
+      /* margin-top:80px; */
+      position: relative;
+      top: 30px;
+    }
+
+    .bill-header .shop-address {
+      font-size: 0.95rem;
+      color: #000;
+      margin-top: 2px;
+      margin-bottom: 2px;
     }
 
     .bill-info {
@@ -54,15 +59,13 @@
       display: flex;
       flex-wrap: wrap;
       justify-content: space-between;
-      border-bottom: 1px dashed #000;
+      border-bottom: 1px dashed #bfc9d1;
       padding-bottom: 8px;
-      color: #000;
     }
 
     .bill-info span {
       min-width: 48%;
       margin-bottom: 2px;
-      text-align: left;
     }
 
     .bill-table {
@@ -70,7 +73,6 @@
       border-collapse: collapse;
       margin: 18px 0 10px 0;
       font-size: 0.98rem;
-      color: #000;
     }
 
     .bill-table th,
@@ -78,34 +80,33 @@
       border: 1px solid #000;
       padding: 7px 6px;
       text-align: center;
-      color: #000;
     }
 
     .bill-table th {
-      background: #fff;
+      background: #f6f8fa;
       font-weight: 700;
       color: #000;
       font-size: 1rem;
+    }
+
+    .bill-table tr:nth-child(even) td {
+      background: #fafbfc;
     }
 
     .bill-summary {
       margin-top: 10px;
       margin-bottom: 10px;
       font-size: 1.05rem;
-      color: #000;
-      text-align: left;
     }
 
     .bill-summary-row {
       display: flex;
       justify-content: space-between;
       margin-bottom: 3px;
-      color: #000;
     }
 
     .bill-summary-row strong {
       font-weight: 600;
-      color: #000;
     }
 
     .bill-footer {
@@ -117,43 +118,47 @@
       letter-spacing: 0.5px;
     }
 
-    hr {
-      border: 1px solid #000;
-    }
-
     @media print {
       body {
         background: #fff;
-        color: #000;
+        font-size: 10px;
         margin: 0;
         padding: 0;
-        height: auto;
-        display: block;
       }
 
       .bill-container {
         width: 58mm;
+        /* Exact width for thermal printer */
+        max-width: none;
         margin: 0 auto;
         padding: 6px;
-        border: none;
         box-shadow: none;
-        text-align: center;
+        border: none;
       }
 
       .bill-header h2 {
-        font-size: 1.5rem;
+        font-size: 1.2rem;
       }
 
-      img {
-        filter: grayscale(100%) contrast(100%);
-      }
-
+      .shop-address,
       .bill-info,
       .bill-summary,
-      .bill-footer,
-      th,
-      td {
-        color: #000 !important;
+      .bill-footer {
+        font-size: 0.75rem;
+      }
+
+      .bill-table {
+        font-size: 0.72rem;
+        margin: 6px 0;
+      }
+
+      .bill-table th {
+        font-size: 0.75rem;
+        padding: 4px;
+      }
+
+      .bill-table td {
+        padding: 3px;
       }
 
       @page {
@@ -167,74 +172,93 @@
 <body>
 
   <div class="bill-container">
+
     <div class="bill-header">
-      <img src="/logo/first_logo.jpg" alt="Shourya Fashion Hub Logo"
-        style="max-height:100px; max-width:100%; margin-top:-10px;" />
-      <h2>Shourya Fashion Hub</h2>
-      <span style="font-weight:600;">Omkar Bhawar, 7262836111</span>
-      <hr>
-    </div>
+      <!-- <h2>Shourya Fashion Hub</h2> -->
+      <div class="shop-address">
+        <div style="text-align:center; margin-bottom:4px;">
+          <img src="/logo/first_logo.jpg" alt="Shourya Fashion Hub Logo" style="max-height:100px; max-width:100%; margin-top:-30px; " />
 
-    <div class="bill-info">
-      <span><strong>Date & Time:</strong> <%= new Date().toLocaleString("en-IN") %></span>
-      <span><strong>Bill No:</strong> <%= data[0].id %></span>
-      <span><strong>Customer:</strong> <%= data[0].customer_name %></span>
-      <span><strong>Mobile:</strong> <%= data[0].mobile %></span>
+        </div>
+        <h2>Shourya Fashion Hub</h2>
+      <span style=" font-weight:600; position: relative; top: -15px;"> Omkar Bhawar,&nbsp;7262836111</span>
+      </div>
+      <hr style="border: 1px solid #000;  position: relative; top: -10px; ">
     </div>
-
+    <div class="bill-info" style="position: relative; top: -14px;">
+      <span><strong>Date & Time:</strong>
+        <%= new Date().toLocaleString("en-IN") %>
+      </span>
+      <span><strong>Bill No:</strong>
+        <%= data[0].id %>
+      </span>
+      <span><strong>Customer:</strong>
+        <%= data[0].customer_name %>
+      </span>
+      <span><strong>Mobile:</strong>
+        <%= data[0].mobile %>
+      </span>
+    </div>
     <% let subtotal=0, totalQty=0, totalDiscount=0, finalTotal=0; %>
-    <table class="bill-table">
-      <thead>
-        <tr>
-          <th>Product</th>
-          <th>Size</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% data.forEach(item=> { %>
-          <% if (!item.product || !item.quantity) return; %>
-          <% subtotal +=parseFloat(item.amount); %>
-          <% totalQty +=parseInt(item.quantity); %>
-          <% totalDiscount +=parseFloat(item.discount_amount); %>
-          <% finalTotal +=parseFloat(item.Total_after_Discount); %>
+      <table class="bill-table" style="position: relative; top: -10px;">
+        <thead>
           <tr>
-            <td><%= item.product %></td>
-            <td><%= item.size %></td>
-            <td><%= item.quantity %></td>
-            <td>₹<%= parseFloat(item.price_per_unit).toFixed(2) %></td>
-            <td>₹<%= parseFloat(item.amount).toFixed(2) %></td>
+            <th>Product</th>
+            <th>Size</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th>Amount</th>
           </tr>
-        <% }); %>
-      </tbody>
-    </table>
-
-    <div class="bill-summary">
-      <div class="bill-summary-row">
-        <span>Subtotal</span>
-        <strong>₹<%= subtotal.toFixed(2) %></strong>
+        </thead>
+        <tbody>
+          <% data.forEach(item=> { %>
+            <% if (!item.product || !item.quantity) return; %>
+              <% subtotal +=parseFloat(item.amount); %>
+                <% totalQty +=parseInt(item.quantity); %>
+                  <% totalDiscount +=parseFloat(item.discount_amount); %>
+                    <% finalTotal +=parseFloat(item.Total_after_Discount); %>
+                      <tr>
+                        <td>
+                          <%= item.product %>
+                        </td>
+                        <td>
+                          <%= item.size %>
+                        </td>
+                        <td>
+                          <%= item.quantity %>
+                        </td>
+                        <td>₹<%= parseFloat(item.price_per_unit).toFixed(2) %>
+                        </td>
+                        <td>₹<%= parseFloat(item.amount).toFixed(2) %>
+                        </td>
+                      </tr>
+                      <% }); %>
+        </tbody>
+      </table>
+      <div class="bill-summary">
+        <div class="bill-summary-row">
+          <span>Subtotal</span>
+          <strong>₹<%= subtotal.toFixed(2) %></strong>
+        </div>
+        <div class="bill-summary-row">
+          <span>Total Quantity</span>
+          <strong>
+            <%= totalQty %>
+          </strong>
+        </div>
+        <div class="bill-summary-row">
+          <span>Discount</span>
+          <strong>₹<%= totalDiscount.toFixed(2) %></strong>
+        </div>
+        <div class="bill-summary-row" style="font-size:1.13rem;">
+          <span>Total After Discount</span>
+          <strong>₹<%= finalTotal.toFixed(2) %></strong>
+        </div>
       </div>
-      <div class="bill-summary-row">
-        <span>Total Quantity</span>
-        <strong><%= totalQty %></strong>
+      <div class="bill-footer">
+        Thank You 🙏 Visit Again!
       </div>
-      <div class="bill-summary-row">
-        <span>Discount</span>
-        <strong>₹<%= totalDiscount.toFixed(2) %></strong>
-      </div>
-      <div class="bill-summary-row" style="font-size:1.13rem;">
-        <span>Total After Discount</span>
-        <strong>₹<%= finalTotal.toFixed(2) %></strong>
-      </div>
-    </div>
-
-    <div class="bill-footer">
-      Thank You 🙏 Visit Again!
-    </div>
   </div>
-
   <script>
     window.print();
     setTimeout(() => {
