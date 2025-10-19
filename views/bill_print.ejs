@@ -10,17 +10,21 @@
       background: #fff;
       color: #000;
       margin: 0;
-      padding: 20px;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
     .bill-container {
-      max-width: 420px;
-      margin: 30px auto;
+      width: 420px;
       background: #fff;
       border-radius: 12px;
       padding: 32px 28px 24px 28px;
       border: 1.5px solid #000;
       color: #000;
+      box-sizing: border-box;
+      text-align: center;
     }
 
     .bill-header {
@@ -29,20 +33,19 @@
       color: #000;
     }
 
+    .bill-header h2 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
     img {
       max-width: 100%;
       width: 150px;
       height: 170px;
-      position: relative;
-      top: 30px;
       filter: grayscale(100%) contrast(100%);
-    }
-
-    .bill-header .shop-address {
-      font-size: 0.95rem;
-      color: #000;
-      margin-top: 2px;
-      margin-bottom: 2px;
     }
 
     .bill-info {
@@ -59,6 +62,7 @@
     .bill-info span {
       min-width: 48%;
       margin-bottom: 2px;
+      text-align: left;
     }
 
     .bill-table {
@@ -89,6 +93,7 @@
       margin-bottom: 10px;
       font-size: 1.05rem;
       color: #000;
+      text-align: left;
     }
 
     .bill-summary-row {
@@ -120,38 +125,35 @@
       body {
         background: #fff;
         color: #000;
-        font-size: 10px;
         margin: 0;
         padding: 0;
+        height: auto;
+        display: block;
       }
 
       .bill-container {
         width: 58mm;
-        max-width: none;
         margin: 0 auto;
         padding: 6px;
-        box-shadow: none;
         border: none;
-        color: #000;
+        box-shadow: none;
+        text-align: center;
       }
 
-      .bill-header h2,
-      .bill-header span,
+      .bill-header h2 {
+        font-size: 1.5rem;
+      }
+
+      img {
+        filter: grayscale(100%) contrast(100%);
+      }
+
       .bill-info,
       .bill-summary,
       .bill-footer,
       th,
       td {
         color: #000 !important;
-      }
-
-      .bill-table th,
-      .bill-table td {
-        border: 1px solid #000;
-      }
-
-      img {
-        filter: grayscale(100%) contrast(100%);
       }
 
       @page {
@@ -165,33 +167,23 @@
 <body>
 
   <div class="bill-container">
-
     <div class="bill-header">
-      <div style="text-align:center; margin-bottom:4px;">
-        <img src="/logo/first_logo.jpg" alt="Shourya Fashion Hub Logo" style="max-height:100px; max-width:100%; margin-top:-30px;" />
-      </div>
-      <h1>Shourya Fashion Hub</h1>
-      <span style="font-weight:600; position: relative; top: -15px;">Omkar Bhawar,&nbsp;7262836111</span>
-      <hr style="position: relative; top: -10px;">
+      <img src="/logo/first_logo.jpg" alt="Shourya Fashion Hub Logo"
+        style="max-height:100px; max-width:100%; margin-top:-10px;" />
+      <h2>Shourya Fashion Hub</h2>
+      <span style="font-weight:600;">Omkar Bhawar, 7262836111</span>
+      <hr>
     </div>
 
-    <div class="bill-info" style="position: relative; top: -14px;">
-      <span><strong>Date & Time:</strong>
-        <%= new Date().toLocaleString("en-IN") %>
-      </span>
-      <span><strong>Bill No:</strong>
-        <%= data[0].id %>
-      </span>
-      <span><strong>Customer:</strong>
-        <%= data[0].customer_name %>
-      </span>
-      <span><strong>Mobile:</strong>
-        <%= data[0].mobile %>
-      </span>
+    <div class="bill-info">
+      <span><strong>Date & Time:</strong> <%= new Date().toLocaleString("en-IN") %></span>
+      <span><strong>Bill No:</strong> <%= data[0].id %></span>
+      <span><strong>Customer:</strong> <%= data[0].customer_name %></span>
+      <span><strong>Mobile:</strong> <%= data[0].mobile %></span>
     </div>
 
     <% let subtotal=0, totalQty=0, totalDiscount=0, finalTotal=0; %>
-    <table class="bill-table" style="position: relative; top: -10px;">
+    <table class="bill-table">
       <thead>
         <tr>
           <th>Product</th>
