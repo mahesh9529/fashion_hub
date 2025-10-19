@@ -18,7 +18,6 @@
       margin: 30px auto;
       background: #fff;
       border-radius: 12px;
-      box-shadow: none;
       padding: 32px 28px 24px 28px;
       border: 1.5px solid #000;
       color: #000;
@@ -36,6 +35,7 @@
       height: 170px;
       position: relative;
       top: 30px;
+      filter: grayscale(100%) contrast(100%);
     }
 
     .bill-header .shop-address {
@@ -95,6 +95,7 @@
       display: flex;
       justify-content: space-between;
       margin-bottom: 3px;
+      color: #000;
     }
 
     .bill-summary-row strong {
@@ -109,6 +110,10 @@
       color: #000;
       font-weight: 600;
       letter-spacing: 0.5px;
+    }
+
+    hr {
+      border: 1px solid #000;
     }
 
     @media print {
@@ -145,6 +150,10 @@
         border: 1px solid #000;
       }
 
+      img {
+        filter: grayscale(100%) contrast(100%);
+      }
+
       @page {
         size: 58mm auto;
         margin: 0;
@@ -163,7 +172,7 @@
       </div>
       <h2>Shourya Fashion Hub</h2>
       <span style="font-weight:600; position: relative; top: -15px;">Omkar Bhawar,&nbsp;7262836111</span>
-      <hr style="border: 1px solid #000; position: relative; top: -10px;">
+      <hr style="position: relative; top: -10px;">
     </div>
 
     <div class="bill-info" style="position: relative; top: -14px;">
